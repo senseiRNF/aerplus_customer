@@ -15,14 +15,14 @@ class APIAuthorizationService {
   Future<bool> loginSystem(String username, String password) async {
     bool result = false;
 
-    await InitServices.init().then((dio) {
+    await InitServices.init().then((dio) async {
       LoadingDialog(context: context).show();
 
       try {
-        dio.post(
+        await dio.post(
           '/api/login',
           data: {
-            'username': username,
+            'login': username,
             'password': password,
           },
         ).then((postResult) async {
@@ -57,11 +57,11 @@ class APIAuthorizationService {
   Future<bool> registerAccount(LocalRegisterModel data) async {
     bool result = false;
 
-    await InitServices.init().then((dio) {
+    await InitServices.init().then((dio) async {
       LoadingDialog(context: context).show();
 
       try {
-        dio.post(
+        await dio.post(
           '/api/register',
           data: {
             'username': data.username,

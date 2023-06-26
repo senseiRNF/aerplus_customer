@@ -18,9 +18,17 @@ class AerplusCustomerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Aerplus Customer',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff59b9ab)),
-        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff0c6170)),
+        // useMaterial3: true,
         fontFamily: 'Lato',
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(10.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
       ),
       home: const SplashPage(),
     );

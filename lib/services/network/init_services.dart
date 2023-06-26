@@ -8,7 +8,7 @@ class InitServices {
     Dio result = Dio();
 
     result.options = BaseOptions(
-      baseUrl: 'http://erp.depotaerplus.com/',
+      baseUrl: 'https://aerplus.xcted.com',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(minutes: 1),
       headers: {

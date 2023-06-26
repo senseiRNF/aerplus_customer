@@ -27,11 +27,11 @@ class OkDialog {
           icon: headIcon != null ?
           headIcon! == true ?
           const Icon(
-            Icons.mood,
+            Icons.check_circle,
             color: Colors.green,
           ) :
           const Icon(
-            Icons.mood_bad,
+            Icons.dangerous_outlined,
             color: Colors.red,
           ) :
           const Icon(
@@ -46,7 +46,7 @@ class OkDialog {
           ),
           content: Text(
             content,
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
           ),
           actions: [
             TextButton(
@@ -100,7 +100,7 @@ class OptionDialog {
           ),
           content: Text(
             content,
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
           ),
           actions: [
             TextButton(
@@ -161,7 +161,7 @@ class LoadingDialog {
                 ),
                 Text(
                   'Loading data from server, please wait...',
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
