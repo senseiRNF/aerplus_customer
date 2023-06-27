@@ -40,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPassword: _passwordConfirmationController.text,
         email: _emailController.text,
         name: _nameController.text,
-        dob: _dobUser != null ? DateFormat('dd / MM / yyyy').format(_dobUser!) : '',
+        dob: _dobUser != null ? DateFormat('yyyy-MM-dd').format(_dobUser!) : '',
         address: _addressController.text,
         phone: _phoneController.text,
         depotId: selectedDepotId,

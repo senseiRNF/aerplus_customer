@@ -29,7 +29,7 @@ class QRFragment extends StatelessWidget {
                 child: QrImageView(
                   data: qrCode,
                   version: QrVersions.auto,
-                  size: 200,
+                  size: 250,
                   gapless: false,
                 ),
               ),

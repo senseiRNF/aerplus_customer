@@ -21,10 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  CarouselOptions carouselOptions = CarouselOptions(
-    height: 200.0,
-  );
-
   TextEditingController searchController = TextEditingController();
 
   String qrCode = "It's just a test";
@@ -32,13 +28,16 @@ class _HomePageState extends State<HomePage> {
   String? email;
 
   int selectedMenu = 0;
+  int? bannerCarouselIndex;
+  int? newsCarouselIndex;
+  int? rewardCarouselIndex;
 
   DepotModel? depotModel;
 
   List<DepotData> sortedDepotList = [];
   List<BannerInformationData> bannerList = [];
   List<BannerInformationData> newsList = [];
-  List<BannerInformationData> prizeList = [];
+  List<BannerInformationData> rewardList = [];
 
   @override
   void initState() {
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     await APIBannerInfoService(context: context).showBanner().then((result) {
       List<BannerInformationData> tempBannerList = [];
       List<BannerInformationData> tempNewsList = [];
-      List<BannerInformationData> tempPrizeList = [];
+      List<BannerInformationData> tempRewardList = [];
 
       if(result != null && result.bannerInformationData != null) {
         for(int i = 0; i < result.bannerInformationData!.length; i++) {
@@ -103,7 +102,7 @@ class _HomePageState extends State<HomePage> {
               tempNewsList.add(result.bannerInformationData![i]);
               break;
             case 'List Hadiah':
-              tempPrizeList.add(result.bannerInformationData![i]);
+              tempRewardList.add(result.bannerInformationData![i]);
               break;
             default:
               break;
@@ -114,7 +113,19 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         bannerList = tempBannerList;
         newsList = tempNewsList;
-        prizeList = tempPrizeList;
+        rewardList = tempRewardList;
+
+        if(bannerList.isNotEmpty) {
+          bannerCarouselIndex = 0;
+        }
+
+        if(newsList.isNotEmpty) {
+          newsCarouselIndex = 0;
+        }
+
+        if(rewardList.isNotEmpty) {
+          rewardCarouselIndex = 0;
+        }
       });
     });
   }
@@ -158,11 +169,46 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return HomeFragment(
           context: context,
-          carouselOptions: carouselOptions,
+          bannerCarouselOptions: CarouselOptions(
+            height: 200.0,
+            viewportFraction: 1.0,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 4),
+            onPageChanged: (int index, CarouselPageChangedReason reason) {
+              setState(() {
+                bannerCarouselIndex = index;
+              });
+            },
+            initialPage: bannerCarouselIndex ?? 0,
+          ),
+          newsCarouselOptions: CarouselOptions(
+            height: 200.0,
+            viewportFraction: 1.0,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 5),
+            onPageChanged: (int index, CarouselPageChangedReason reason) {
+              setState(() {
+                newsCarouselIndex = index;
+              });
+            },
+            initialPage: newsCarouselIndex ?? 0,
+          ),
+          rewardCarouselOptions: CarouselOptions(
+            height: 200.0,
+            viewportFraction: 0.5,
+            onPageChanged: (int index, CarouselPageChangedReason reason) {
+              setState(() {
+                rewardCarouselIndex = index;
+              });
+            },
+            initialPage: rewardCarouselIndex ?? 0,
+          ),
           name: name,
           bannerList: bannerList,
           newsList: newsList,
-          prizeList: prizeList,
+          rewardList: rewardList,
+          bannerCarouselIndex: bannerCarouselIndex,
+          newsCarouselIndex: newsCarouselIndex,
         );
       case 1:
         return DepotFragment(
