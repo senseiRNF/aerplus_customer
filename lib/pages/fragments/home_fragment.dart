@@ -25,20 +25,8 @@ class HomeFragment extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ],
+              const SizedBox(
+                height: 10.0,
               ),
               Text(
                 "Hi, ${name ?? 'Unknown User'}",

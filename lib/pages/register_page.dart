@@ -1,7 +1,9 @@
 import 'package:aerplus_customer/miscellaneous/route_functions.dart';
+import 'package:aerplus_customer/pages/depot_list_selection_page.dart';
 import 'package:aerplus_customer/pages/register_result_page.dart';
 import 'package:aerplus_customer/services/local/models/local_register_model.dart';
 import 'package:aerplus_customer/services/network/authorization_services/api_authorization_service.dart';
+import 'package:aerplus_customer/services/network/models/depot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _depotController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
@@ -25,9 +28,11 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _hidePassword = true;
   bool _hidePasswordConf = true;
 
+  int? selectedDepotId;
+
   DateTime? _dobUser;
 
-  Future submitReqeust() async {
+  Future submitRequest() async {
     await APIAuthorizationService(context: context).registerAccount(
       LocalRegisterModel(
         username: _emailController.text,
@@ -38,6 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
         dob: _dobUser != null ? DateFormat('dd / MM / yyyy').format(_dobUser!) : '',
         address: _addressController.text,
         phone: _phoneController.text,
+        depotId: selectedDepotId,
       ),
     ).then((registerResult) {
       if(registerResult == true) {
@@ -156,11 +162,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               border: UnderlineInputBorder(),
                             ),
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.next,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
                           ),
                         ),
                       ),
@@ -205,6 +206,45 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      const Text(
+                        'Depot Yang Sering Dikunjungi',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => MoveTo(
+                          context: context,
+                          target: const DepotListSelectionPage(),
+                          callback: (callbackResult) {
+                            if(callbackResult != null) {
+                              DepotData result = callbackResult;
+
+                              if(result.id != null) {
+                                setState(() {
+                                  selectedDepotId = result.id;
+                                  _depotController.text = result.name ?? 'Unknown Depot';
+                                });
+                              }
+                            }
+                          }
+                        ).go(),
+                        child: IgnorePointer(
+                          child: TextField(
+                            controller: _depotController,
+                            decoration: const InputDecoration(
+                              hintText: 'Pilih depot disini',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              border: UnderlineInputBorder(),
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 20.0,
@@ -280,7 +320,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: ElevatedButton(
-              onPressed: () => submitReqeust(),
+              onPressed: () => submitRequest(),
               child: const Text(
                 'Buat Akun',
                 style: TextStyle(

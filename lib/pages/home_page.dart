@@ -1,10 +1,13 @@
 import 'package:aerplus_customer/miscellaneous/dialog_functions.dart';
 import 'package:aerplus_customer/miscellaneous/route_functions.dart';
+import 'package:aerplus_customer/pages/fragments/depot_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/home_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/profile_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/qr_fragment.dart';
 import 'package:aerplus_customer/pages/splash_page.dart';
 import 'package:aerplus_customer/services/local/local_shared_preferences.dart';
+import 'package:aerplus_customer/services/network/depot_services/api_depot_service.dart';
+import 'package:aerplus_customer/services/network/models/depot_model.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
 
@@ -16,23 +19,84 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String qrCode = "It's just a test";
-
-  int selectedMenu = 0;
-
   CarouselOptions carouselOptions = CarouselOptions(
     height: 200.0,
   );
+
+  TextEditingController searchController = TextEditingController();
+
+  String qrCode = "It's just a test";
+  String? name;
+  String? email;
+
+  int selectedMenu = 0;
+
+  DepotModel? depotModel;
+  List<DepotData> sortedDepotList = [];
 
   @override
   void initState() {
     super.initState();
 
-    initLoad();
+    loadPage();
   }
 
-  Future initLoad() async {
+  Future loadPage() async {
+    await LocalSharedPreferences.readKey(LocalSPKeys.nameKey).then((nameResult) async {
+      await LocalSharedPreferences.readKey(LocalSPKeys.emailKey).then((emailResult) {
+        setState(() {
+          name = nameResult;
+          email = emailResult;
+        });
 
+        loadDepot();
+      });
+    });
+  }
+
+  Future loadDepot() async {
+    await APIDepotService(context: context).showDepot().then((result) {
+      if(result != null) {
+        List<DepotData> tempSortedDepotList = [];
+
+        if(result.depotData != null) {
+          for(int i = 0; i < result.depotData!.length; i++) {
+            if(searchController.text == '') {
+              tempSortedDepotList.add(result.depotData![i]);
+            } else {
+              if(result.depotData![i].name != null && result.depotData![i].name!.toUpperCase().contains(searchController.text.toUpperCase())) {
+                tempSortedDepotList.add(result.depotData![i]);
+              }
+            }
+          }
+        }
+
+        setState(() {
+          depotModel = result;
+          sortedDepotList = tempSortedDepotList;
+        });
+      }
+    });
+  }
+
+  searchDepot(String query) {
+    List<DepotData> tempSortedDepotList = [];
+
+    if(depotModel != null && depotModel!.depotData != null) {
+      for(int i = 0; i < depotModel!.depotData!.length; i++) {
+        if(query == '') {
+          tempSortedDepotList.add(depotModel!.depotData![i]);
+        } else {
+          if(depotModel!.depotData![i].name != null && depotModel!.depotData![i].name!.toUpperCase().contains(query.toUpperCase())) {
+            tempSortedDepotList.add(depotModel!.depotData![i]);
+          }
+        }
+      }
+    }
+
+    setState(() {
+      sortedDepotList = tempSortedDepotList;
+    });
   }
 
   logout() async {
@@ -55,18 +119,30 @@ class _HomePageState extends State<HomePage> {
         return HomeFragment(
           context: context,
           carouselOptions: carouselOptions,
+          name: name,
+        );
+      case 1:
+        return DepotFragment(
+          context: context,
+          searchController: searchController,
+          depotList: sortedDepotList,
+          onQuerySearch: (query) => searchDepot(query),
+          onSelectDepot: () {},
+          onRefresh: () => loadPage(),
         );
       case 2:
         return QRFragment(
           context: context,
           qrCode: qrCode,
-          onRefresh: () => initLoad(),
+          onRefresh: () => loadPage(),
         );
       case 4:
         return ProfileFragment(
           context: context,
+          name: name,
+          email: email,
           onLogout: () => logout(),
-          onRefresh: () => initLoad(),
+          onRefresh: () => loadPage(),
         );
       default:
         return const Column(
@@ -74,19 +150,19 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Menu Not Found',
+              'Menu Tidak Dapat Ditampilkan',
               style: TextStyle(
                 fontSize: 20.0,
               ),
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: 10.0,
+              height: 20.0,
             ),
             Text(
-              'You supposed to not to seeing this page\nPlease contact Administrator.',
+              'Terjadi kesalahan saat memuat halaman\nHarap hubungi Administrator untuk informasi lebih lanjut.',
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
               textAlign: TextAlign.center,
             ),
@@ -99,7 +175,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: selectedScreen(selectedMenu),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: selectedScreen(selectedMenu),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (int index) {

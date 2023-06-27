@@ -7,6 +7,7 @@ class LocalRegisterModel {
   String? dob;
   String? address;
   String? phone;
+  int? depotId;
 
   LocalRegisterModel({
     this.username,
@@ -17,5 +18,6 @@ class LocalRegisterModel {
     this.dob,
     this.address,
     this.phone,
+    this.depotId,
   });
 }

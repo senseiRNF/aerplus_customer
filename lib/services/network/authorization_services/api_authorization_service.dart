@@ -71,6 +71,7 @@ class APIAuthorizationService {
             'dob': data.dob,
             'address': data.address,
             'phone': data.phone,
+            'depot_id': data.depotId,
           },
         ).then((postResult) async {
           result =  true;

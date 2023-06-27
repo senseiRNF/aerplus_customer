@@ -18,12 +18,6 @@ class QRFragment extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 40.0),
-        Image.asset(
-          'assets/images/logo.png',
-          width: 195,
-          height: 66,
-        ),
         const SizedBox(height: 10.0),
         Expanded(
           child: qrCode != '' ?
@@ -31,14 +25,6 @@ class QRFragment extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Unknown Company Name',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 20.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
               Center(
                 child: QrImageView(
                   data: qrCode,

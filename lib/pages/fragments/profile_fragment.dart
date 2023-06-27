@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 
 class ProfileFragment extends StatelessWidget {
   final BuildContext context;
+  final String? name;
+  final String? email;
   final Function onLogout;
   final Function onRefresh;
 
   const ProfileFragment({
     super.key,
     required this.context,
+    this.name,
+    this.email,
     required this.onLogout,
     required this.onRefresh,
   });
@@ -17,12 +21,6 @@ class ProfileFragment extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 40.0),
-        Image.asset(
-          'assets/images/logo.png',
-          width: 195,
-          height: 66,
-        ),
         const SizedBox(height: 10.0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -41,22 +39,22 @@ class ProfileFragment extends StatelessWidget {
                   const SizedBox(
                     width: 10.0,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'User Name',
-                          style: TextStyle(
+                          name ?? 'Unknown User',
+                          style: const TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5.0,
                         ),
                         Text(
-                          'email',
+                          email ?? 'Unknown Email',
                         ),
                       ],
                     ),
