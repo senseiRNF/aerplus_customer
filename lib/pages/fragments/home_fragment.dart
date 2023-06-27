@@ -1,3 +1,5 @@
+import 'package:aerplus_customer/services/network/models/banner_information_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +8,9 @@ class HomeFragment extends StatelessWidget {
   final CarouselOptions carouselOptions;
   final String? name;
   final int? point;
+  final List<BannerInformationData> bannerList;
+  final List<BannerInformationData> newsList;
+  final List<BannerInformationData> prizeList;
 
   const HomeFragment({
     super.key,
@@ -13,6 +18,9 @@ class HomeFragment extends StatelessWidget {
     required this.carouselOptions,
     this.name,
     this.point,
+    required this.bannerList,
+    required this.newsList,
+    required this.prizeList,
   });
 
   @override
@@ -66,43 +74,18 @@ class HomeFragment extends StatelessWidget {
             children: [
               CarouselSlider(
                 options: carouselOptions,
-                items: const [
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Banner #1',
-                      ),
+                items: bannerList.map<Widget>((banner) {
+                  return Card(
+                    child: CachedNetworkImage(
+                      imageUrl: banner.bannerInformationMedia != null && banner.bannerInformationMedia!.isNotEmpty ? banner.bannerInformationMedia![0].originalUrl ?? '' : '',
+                      placeholder: (BuildContext loadingContext, String url) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Banner #2',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Banner #3',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Banner #4',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Banner #5',
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
               const SizedBox(
                 height: 20.0,
@@ -118,43 +101,18 @@ class HomeFragment extends StatelessWidget {
               ),
               CarouselSlider(
                 options: carouselOptions,
-                items: const [
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'News #1',
-                      ),
+                items: newsList.map<Widget>((news) {
+                  return Card(
+                    child: CachedNetworkImage(
+                      imageUrl: news.bannerInformationMedia != null && news.bannerInformationMedia!.isNotEmpty ? news.bannerInformationMedia![0].originalUrl ?? '' : '',
+                      placeholder: (BuildContext loadingContext, String url) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'News #2',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'News #3',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'News #4',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'News #5',
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
               const SizedBox(
                 height: 20.0,
@@ -170,43 +128,18 @@ class HomeFragment extends StatelessWidget {
               ),
               CarouselSlider(
                 options: carouselOptions,
-                items: const [
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Prize #1',
-                      ),
+                items: prizeList.map<Widget>((prize) {
+                  return Card(
+                    child: CachedNetworkImage(
+                      imageUrl: prize.bannerInformationMedia != null && prize.bannerInformationMedia!.isNotEmpty ? prize.bannerInformationMedia![0].originalUrl ?? '' : '',
+                      placeholder: (BuildContext loadingContext, String url) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Prize #2',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Prize #3',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Prize #4',
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Center(
-                      child: Text(
-                        'Prize #5',
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
             ],
           ),

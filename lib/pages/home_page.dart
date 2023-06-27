@@ -6,7 +6,9 @@ import 'package:aerplus_customer/pages/fragments/profile_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/qr_fragment.dart';
 import 'package:aerplus_customer/pages/splash_page.dart';
 import 'package:aerplus_customer/services/local/local_shared_preferences.dart';
+import 'package:aerplus_customer/services/network/banner_information_services/api_banner_info_service.dart';
 import 'package:aerplus_customer/services/network/depot_services/api_depot_service.dart';
+import 'package:aerplus_customer/services/network/models/banner_information_model.dart';
 import 'package:aerplus_customer/services/network/models/depot_model.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +34,21 @@ class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
 
   DepotModel? depotModel;
+
   List<DepotData> sortedDepotList = [];
+  List<BannerInformationData> bannerList = [];
+  List<BannerInformationData> newsList = [];
+  List<BannerInformationData> prizeList = [];
 
   @override
   void initState() {
     super.initState();
 
-    loadPage();
+    loadPage().then((_) {
+      loadDepot().then((_) {
+        loadBannerInformation();
+      });
+    });
   }
 
   Future loadPage() async {
@@ -48,8 +58,6 @@ class _HomePageState extends State<HomePage> {
           name = nameResult;
           email = emailResult;
         });
-
-        loadDepot();
       });
     });
   }
@@ -76,6 +84,38 @@ class _HomePageState extends State<HomePage> {
           sortedDepotList = tempSortedDepotList;
         });
       }
+    });
+  }
+
+  Future loadBannerInformation() async {
+    await APIBannerInfoService(context: context).showBanner().then((result) {
+      List<BannerInformationData> tempBannerList = [];
+      List<BannerInformationData> tempNewsList = [];
+      List<BannerInformationData> tempPrizeList = [];
+
+      if(result != null && result.bannerInformationData != null) {
+        for(int i = 0; i < result.bannerInformationData!.length; i++) {
+          switch(result.bannerInformationData![i].type) {
+            case 'Banner':
+              tempBannerList.add(result.bannerInformationData![i]);
+              break;
+            case 'News':
+              tempNewsList.add(result.bannerInformationData![i]);
+              break;
+            case 'List Hadiah':
+              tempPrizeList.add(result.bannerInformationData![i]);
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
+      setState(() {
+        bannerList = tempBannerList;
+        newsList = tempNewsList;
+        prizeList = tempPrizeList;
+      });
     });
   }
 
@@ -120,6 +160,9 @@ class _HomePageState extends State<HomePage> {
           context: context,
           carouselOptions: carouselOptions,
           name: name,
+          bannerList: bannerList,
+          newsList: newsList,
+          prizeList: prizeList,
         );
       case 1:
         return DepotFragment(
@@ -128,7 +171,7 @@ class _HomePageState extends State<HomePage> {
           depotList: sortedDepotList,
           onQuerySearch: (query) => searchDepot(query),
           onSelectDepot: () {},
-          onRefresh: () => loadPage(),
+          onRefresh: () => loadDepot(),
         );
       case 2:
         return QRFragment(
