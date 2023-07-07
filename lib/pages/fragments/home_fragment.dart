@@ -15,6 +15,9 @@ class HomeFragment extends StatelessWidget {
   final List<BannerInformationData> rewardList;
   final int? bannerCarouselIndex;
   final int? newsCarouselIndex;
+  final Function onBannerPressed;
+  final Function onNewsPressed;
+  final Function onRewardPressed;
 
   const HomeFragment({
     super.key,
@@ -29,6 +32,9 @@ class HomeFragment extends StatelessWidget {
     required this.rewardList,
     this.bannerCarouselIndex,
     this.newsCarouselIndex,
+    required this.onBannerPressed,
+    required this.onNewsPressed,
+    required this.onRewardPressed,
   });
 
   @override
@@ -88,45 +94,48 @@ class HomeFragment extends StatelessWidget {
                     CarouselSlider(
                       options: bannerCarouselOptions,
                       items: bannerList.map<Widget>((banner) {
-                        return CachedNetworkImage(
-                          imageUrl: banner.bannerInformationMedia != null && banner.bannerInformationMedia!.isNotEmpty ? banner.bannerInformationMedia![0].originalUrl ?? '' : '',
-                          imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                image: DecorationImage(
-                                  image: imgProvider,
-                                  fit: BoxFit.cover,
+                        return InkWell(
+                          onTap: () => onBannerPressed(banner),
+                          child: CachedNetworkImage(
+                            imageUrl: banner.bannerInformationMedia != null && banner.bannerInformationMedia!.isNotEmpty ? banner.bannerInformationMedia![0].originalUrl ?? '' : '',
+                            imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  image: DecorationImage(
+                                    image: imgProvider,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          placeholder: (BuildContext loadingContext, String url) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          errorWidget: (BuildContext errorContext, String url, err) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Icon(
-                                  Icons.image_not_supported,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 30.0,
-                                ),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                const Text(
-                                  'Gagal Memuat Gambar',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            );
-                          },
+                              );
+                            },
+                            placeholder: (BuildContext loadingContext, String url) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            errorWidget: (BuildContext errorContext, String url, err) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.image_not_supported,
+                                    color: Theme.of(context).colorScheme.primary,
+                                    size: 30.0,
+                                  ),
+                                  const SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  const Text(
+                                    'Gagal Memuat Gambar',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         );
                       }).toList(),
                     ),
@@ -172,45 +181,48 @@ class HomeFragment extends StatelessWidget {
                     CarouselSlider(
                       options: newsCarouselOptions,
                       items: newsList.map<Widget>((news) {
-                        return CachedNetworkImage(
-                          imageUrl: news.bannerInformationMedia != null && news.bannerInformationMedia!.isNotEmpty ? news.bannerInformationMedia![0].originalUrl ?? '' : '',
-                          imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                image: DecorationImage(
-                                  image: imgProvider,
-                                  fit: BoxFit.cover,
+                        return InkWell(
+                          onTap: () => onNewsPressed(news),
+                          child: CachedNetworkImage(
+                            imageUrl: news.bannerInformationMedia != null && news.bannerInformationMedia!.isNotEmpty ? news.bannerInformationMedia![0].originalUrl ?? '' : '',
+                            imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  image: DecorationImage(
+                                    image: imgProvider,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          placeholder: (BuildContext loadingContext, String url) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          errorWidget: (BuildContext errorContext, String url, err) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Icon(
-                                  Icons.image_not_supported,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 30.0,
-                                ),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                const Text(
-                                  'Gagal Memuat Gambar',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            );
-                          },
+                              );
+                            },
+                            placeholder: (BuildContext loadingContext, String url) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            errorWidget: (BuildContext errorContext, String url, err) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.image_not_supported,
+                                    color: Theme.of(context).colorScheme.primary,
+                                    size: 30.0,
+                                  ),
+                                  const SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  const Text(
+                                    'Gagal Memuat Gambar',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         );
                       }).toList(),
                     ),
@@ -254,45 +266,48 @@ class HomeFragment extends StatelessWidget {
                 child: CarouselSlider(
                   options: rewardCarouselOptions,
                   items: rewardList.map<Widget>((reward) {
-                    return CachedNetworkImage(
-                      imageUrl: reward.bannerInformationMedia != null && reward.bannerInformationMedia!.isNotEmpty ? reward.bannerInformationMedia![0].originalUrl ?? '' : '',
-                      imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            image: DecorationImage(
-                              image: imgProvider,
-                              fit: BoxFit.contain,
+                    return InkWell(
+                      onTap: () => onRewardPressed(reward),
+                      child: CachedNetworkImage(
+                        imageUrl: reward.bannerInformationMedia != null && reward.bannerInformationMedia!.isNotEmpty ? reward.bannerInformationMedia![0].originalUrl ?? '' : '',
+                        imageBuilder: (BuildContext imageContext, ImageProvider imgProvider) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              image: DecorationImage(
+                                image: imgProvider,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      placeholder: (BuildContext loadingContext, String url) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                      errorWidget: (BuildContext errorContext, String url, err) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 30.0,
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            const Text(
-                              'Gagal Memuat Gambar',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        );
-                      },
+                          );
+                        },
+                        placeholder: (BuildContext loadingContext, String url) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                        errorWidget: (BuildContext errorContext, String url, err) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Icon(
+                                Icons.image_not_supported,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 30.0,
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              const Text(
+                                'Gagal Memuat Gambar',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     );
                   }).toList(),
                 ),

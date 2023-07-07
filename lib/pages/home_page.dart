@@ -1,5 +1,6 @@
 import 'package:aerplus_customer/miscellaneous/dialog_functions.dart';
 import 'package:aerplus_customer/miscellaneous/route_functions.dart';
+import 'package:aerplus_customer/pages/banner_display_page.dart';
 import 'package:aerplus_customer/pages/fragments/depot_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/home_fragment.dart';
 import 'package:aerplus_customer/pages/fragments/profile_fragment.dart';
@@ -209,6 +210,15 @@ class _HomePageState extends State<HomePage> {
           rewardList: rewardList,
           bannerCarouselIndex: bannerCarouselIndex,
           newsCarouselIndex: newsCarouselIndex,
+          onBannerPressed: (BannerInformationData bannerData) => MoveTo(
+            context: context, target: BannerDisplayPage(bannerData: bannerData),
+          ).go(),
+          onNewsPressed: (BannerInformationData bannerData) => MoveTo(
+            context: context, target: BannerDisplayPage(bannerData: bannerData),
+          ).go(),
+          onRewardPressed: (BannerInformationData bannerData) => MoveTo(
+            context: context, target: BannerDisplayPage(bannerData: bannerData),
+          ).go(),
         );
       case 1:
         return DepotFragment(
